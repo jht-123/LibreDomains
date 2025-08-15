@@ -1,0 +1,17 @@
+{
+  "description": "音乐外链API",
+  "owner": {
+    "name": "音乐",
+    "github": "vipmc838", 
+    "email": "vipmc838@hotmail.com"
+  },
+  "records": [
+    {
+      "type": "CNAME",
+      "name": "@",
+      "content": "b8890df4.music.ciao.su.dnsoe3.com",
+      "ttl": 3600,
+      "proxied": true
+    }
+  ]
+}
