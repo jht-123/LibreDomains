@@ -1,0 +1,17 @@
+{
+  "description": "图床",
+  "owner": {
+    "name": "图床",
+    "github": "vipmc838", 
+    "email": "vipmc838@hotmail.com"
+  },
+  "records": [
+    {
+      "type": "CNAME",
+      "name": "@",
+      "content": "7e54c66d5c6a1ebc.vercel-dns-017.com",
+      "ttl": 3600,
+      "proxied": true
+    }
+  ]
+}
