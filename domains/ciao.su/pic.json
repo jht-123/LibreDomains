@@ -1,0 +1,17 @@
+{
+  "description": "图床外链API",
+  "owner": {
+    "name": "vipmc838",
+    "github": "vipmc838", 
+    "email": "vipmc838@hotmail.com"
+  },
+  "records": [
+    {
+      "type": "CNAME",
+      "name": "@",
+      "content": "b8890df4.pic.ciao.su.dnsoe3.com",
+      "ttl": 3600,
+      "proxied": false
+    }
+  ]
+}

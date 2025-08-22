@@ -1,0 +1,17 @@
+{
+  "description": "CF优选域名",
+  "owner": {
+    "name": "zwei",
+    "github": "bestZwei", 
+    "email": "post@zwei.de.eu.org"
+  },
+  "records": [
+    {
+      "type": "CNAME",
+      "name": "@",
+      "content": "cf.090227.xyz",
+      "ttl": 3600,
+      "proxied": false
+    }
+  ]
+}
