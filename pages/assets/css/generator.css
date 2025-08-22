@@ -1,0 +1,820 @@
+/* 配置生成器页面专用样式 - LibreDomains */
+
+/* 进度条 */
+.header-progress {
+    max-width: 600px;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.progress-step.active .step-number {
+    background: var(--primary-color);
+    color: white;
+}
+
+.progress-step.completed .step-number {
+    background: var(--success-color);
+    color: white;
+}
+
+.step-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.progress-step.active .step-label {
+    color: var(--primary-color);
+}
+
+.progress-step.completed .step-label {
+    color: var(--success-color);
+}
+
+.progress-bar {
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 33.33%;
+}
+
+/* 生成器区域 */
+.generator-section {
+    padding: 4rem 0 6rem;
+    background: var(--bg-secondary);
+}
+
+.generator-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-wrapper {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.config-form {
+    position: relative;
+}
+
+/* 表单步骤 */
+.form-step {
+    display: none;
+    padding: 3rem;
+    min-height: 500px;
+}
+
+.form-step.active {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.step-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.step-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.step-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* 表单元素 */
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.form-label i {
+    color: var(--primary-color);
+    font-size: 0.875rem;
+}
+
+.required {
+    color: var(--error-color);
+    font-weight: 700;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    transition: var(--transition);
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-input.error {
+    border-color: var(--error-color);
+}
+
+.form-input.success {
+    border-color: var(--success-color);
+}
+
+.domain-input-group {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-primary);
+    transition: var(--transition);
+}
+
+.domain-input-group:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.domain-input-group .form-input {
+    border: none;
+    box-shadow: none;
+    flex: 1;
+}
+
+.domain-separator {
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin: 0 0.5rem;
+    font-size: 1.1rem;
+}
+
+.domain-input-group .form-select {
+    border: none;
+    box-shadow: none;
+    background: none;
+    font-weight: 600;
+}
+
+.form-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.form-hint i {
+    color: var(--primary-color);
+    font-size: 0.75rem;
+}
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--error-color);
+}
+
+.form-success {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--success-color);
+}
+
+/* DNS 记录管理 */
+.dns-records-container {
+    margin-bottom: 2rem;
+}
+
+.dns-record-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+.dns-record-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.record-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.record-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.remove-record-btn {
+    background: var(--error-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.remove-record-btn:hover {
+    background: #dc2626;
+    transform: scale(1.05);
+}
+
+.record-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.record-type-select,
+.record-name-select {
+    font-weight: 500;
+}
+
+.custom-name-input {
+    margin-top: 0.5rem;
+}
+
+.record-content-input {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+}
+
+.record-content-label {
+    transition: var(--transition);
+}
+
+.record-hint {
+    transition: var(--transition);
+}
+
+.record-hint-text {
+    transition: var(--transition);
+}
+
+/* 切换开关 */
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-label {
+    position: relative;
+    width: 48px;
+    height: 24px;
+    background: var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.toggle-input:checked + .toggle-label {
+    background: var(--primary-color);
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider {
+    transform: translateX(24px);
+}
+
+.toggle-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* DNS 操作 */
+.dns-actions {
+    border-top: 1px solid var(--border-light);
+    padding-top: 2rem;
+}
+
+.preset-templates {
+    margin-top: 2rem;
+}
+
+.preset-templates h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.template-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.template-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.template-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.template-btn i {
+    font-size: 1.25rem;
+}
+
+/* 配置预览 */
+.config-preview {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.preview-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.preview-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.config-content {
+    position: relative;
+}
+
+.config-content pre {
+    margin: 0;
+    padding: 2rem;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.config-content code {
+    font-family: inherit;
+}
+
+/* 下一步操作 */
+.next-steps {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+}
+
+.next-steps h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.next-step {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.next-step:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.next-step .step-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.next-step .step-content {
+    flex: 1;
+}
+
+.next-step h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.next-step p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.step-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    background: rgba(99, 102, 241, 0.1);
+    transition: var(--transition);
+}
+
+.step-link:hover {
+    background: rgba(99, 102, 241, 0.2);
+    transform: translateY(-1px);
+}
+
+.step-link.disabled {
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    cursor: not-allowed;
+}
+
+.file-path {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.file-path code {
+    color: var(--warning-color);
+}
+
+/* 表单导航 */
+.form-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 3rem;
+    background: var(--bg-tertiary);
+    border-top: 1px solid var(--border-color);
+}
+
+.form-navigation .btn {
+    min-width: 120px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .header-progress {
+        max-width: 100%;
+    }
+
+    .progress-steps {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .progress-steps::before {
+        display: none;
+    }
+
+    .form-step {
+        padding: 2rem 1.5rem;
+        min-height: auto;
+    }
+
+    .step-header {
+        margin-bottom: 2rem;
+    }
+
+    .step-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .domain-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .domain-separator {
+        display: none;
+    }
+
+    .dns-record-item {
+        padding: 1rem;
+    }
+
+    .record-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .template-buttons {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .template-btn {
+        padding: 0.75rem;
+    }
+
+    .preview-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .preview-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .preview-actions .btn {
+        flex: 1;
+    }
+
+    .config-content pre {
+        padding: 1rem;
+        font-size: 0.75rem;
+    }
+
+    .next-steps {
+        padding: 1.5rem;
+    }
+
+    .next-step {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .next-step .step-icon {
+        align-self: center;
+    }
+
+    .form-navigation {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .form-navigation .btn {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-step {
+        padding: 1.5rem 1rem;
+    }
+
+    .dns-record-item {
+        padding: 0.75rem;
+    }
+
+    .record-form .form-row {
+        gap: 0.75rem;
+    }
+
+    .toggle-switch {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .config-content pre {
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+
+    .next-steps {
+        padding: 1rem;
+    }
+
+    .next-step {
+        padding: 0.75rem;
+    }
+
+    .next-step .step-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+/* 动画增强 */
+.dns-record-item {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-input.error {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+/* 加载状态 */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    color: white;
+}

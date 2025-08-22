@@ -5,331 +5,391 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LibreDomains - 自由域名分发服务</title>
     <meta name="description" content="LibreDomains 是一个开源的二级域名分发服务，通过 GitHub Pull Request 申请和管理免费二级域名">
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- 引入现代字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/home.css">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>LibreDomains</h1>
-                <p>自由域名分发服务</p>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">LibreDomains</span>
+                    <span class="brand-tagline">自由域名</span>
+                </div>
             </div>
-            <nav class="nav">
-                <a href="#features">功能特性</a>
-                <a href="#domains">可用域名</a>
-                <a href="#guide">申请指南</a>
-                <a href="#docs">文档</a>
-                <a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub</a>
-            </nav>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="query.html" class="nav-link">
+                    <i class="fas fa-search"></i>
+                    <span>域名查询</span>
+                </a>
+                <a href="generator-simple.html" class="nav-link">
+                    <i class="fas fa-code"></i>
+                    <span>配置生成器</span>
+                </a>
+                <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="nav-link external">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-    </header>
-    
+    </nav>
+
     <main>
+        <!-- 英雄区域 -->
         <section class="hero">
+            <div class="hero-background">
+                <div class="hero-gradient"></div>
+                <div class="hero-pattern"></div>
+                <div class="floating-elements">
+                    <div class="floating-element" style="--delay: 0s; --duration: 20s;"></div>
+                    <div class="floating-element" style="--delay: 5s; --duration: 25s;"></div>
+                    <div class="floating-element" style="--delay: 10s; --duration: 30s;"></div>
+                </div>
+            </div>
+
             <div class="container">
                 <div class="hero-content">
-                    <h2>免费获得你的专属二级域名</h2>
-                    <p>通过 GitHub Pull Request 快速申请和管理二级域名，完全开源、免费使用</p>
-                    <div class="hero-actions">
-                        <a href="#domains" class="btn btn-primary">立即查询</a>
-                        <a href="#guide" class="btn btn-secondary">申请指南</a>
-                        <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="btn btn-outline">GitHub</a>
+                    <div class="hero-text">
+                        <div class="hero-badge">
+                            <i class="fas fa-rocket"></i>
+                            <span>开源 • 免费 • 快速</span>
+                        </div>
+
+                        <h1 class="hero-title">
+                            <span class="title-main">自由域名分发服务</span>
+                            <span class="title-sub">通过 GitHub 轻松管理你的域名</span>
+                        </h1>
+
+                        <p class="hero-description">
+                            LibreDomains 提供完全免费的二级域名服务，通过 GitHub Pull Request
+                            快速申请和管理域名，支持多种 DNS 记录类型，1-5分钟即可生效。
+                        </p>
+
+                        <div class="hero-features">
+                            <div class="feature-pill">
+                                <i class="fas fa-bolt"></i>
+                                <span>快速部署</span>
+                            </div>
+                            <div class="feature-pill">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>安全可靠</span>
+                            </div>
+                            <div class="feature-pill">
+                                <i class="fab fa-osi"></i>
+                                <span>开源免费</span>
+                            </div>
+                        </div>
+
+                        <div class="hero-actions">
+                            <a href="generator-simple.html" class="btn btn-primary">
+                                <i class="fas fa-code"></i>
+                                <span>开始申请</span>
+                            </a>
+                            <a href="query.html" class="btn btn-secondary">
+                                <i class="fas fa-search"></i>
+                                <span>查询域名</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="heroTotalDomains">-</span>
-                        <span class="stat-label">已注册域名</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">2</span>
-                        <span class="stat-label">可用主域名</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">1-5</span>
-                        <span class="stat-label">分钟生效</span>
+
+                    <div class="hero-stats">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number" id="totalDomains">-</div>
+                                    <div class="stat-label">已注册域名</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">2</div>
+                                    <div class="stat-label">可用主域名</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">1-5</div>
+                                    <div class="stat-label">分钟生效</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number" id="totalUsers">-</div>
+                                    <div class="stat-label">活跃用户</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="features" class="features">
+        <!-- 功能特性区域 -->
+        <section class="features-section">
             <div class="container">
-                <h2>功能特性</h2>
+                <div class="section-header">
+                    <h2 class="section-title">为什么选择 LibreDomains？</h2>
+                    <p class="section-subtitle">专业的域名服务，简单的申请流程</p>
+                </div>
+
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">🚀</div>
-                        <h3>快速申请</h3>
-                        <p>通过 GitHub PR 快速申请域名，自动化审核流程</p>
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>快速申请</h3>
+                            <p>通过 GitHub PR 快速申请域名，自动化审核流程，1-5分钟即可生效</p>
+                        </div>
+                        <div class="feature-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
+
                     <div class="feature-card">
-                        <div class="feature-icon">🔒</div>
-                        <h3>安全可靠</h3>
-                        <p>基于 Cloudflare 的 DNS 服务，提供安全防护和高可用性</p>
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>安全可靠</h3>
+                            <p>基于 Cloudflare 的 DNS 服务，提供 DDoS 防护和全球 CDN 加速</p>
+                        </div>
+                        <div class="feature-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
+
                     <div class="feature-card">
-                        <div class="feature-icon">🆓</div>
-                        <h3>完全免费</h3>
-                        <p>开源项目，完全免费使用，无隐藏费用</p>
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>完全免费</h3>
+                            <p>开源项目，完全免费使用，无隐藏费用，无广告，无限制</p>
+                        </div>
+                        <div class="feature-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
+
                     <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>快速生效</h3>
-                        <p>域名记录通常在 1-5 分钟内生效</p>
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>灵活配置</h3>
+                            <p>支持 A、AAAA、CNAME、TXT、MX 等多种记录类型，满足各种需求</p>
+                        </div>
+                        <div class="feature-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
+
                     <div class="feature-card">
-                        <div class="feature-icon">🛠️</div>
-                        <h3>灵活配置</h3>
-                        <p>支持 A、AAAA、CNAME、TXT、MX 等多种记录类型</p>
+                        <div class="feature-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>易于管理</h3>
+                            <p>通过 GitHub 轻松管理和更新域名记录，版本控制，历史追踪</p>
+                        </div>
+                        <div class="feature-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
+
                     <div class="feature-card">
-                        <div class="feature-icon">📱</div>
-                        <h3>易于管理</h3>
-                        <p>通过 GitHub 轻松管理和更新域名记录</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="domains" class="domains">
-            <div class="container">
-                <h2>子域名查询</h2>
-                <p class="section-description">检查你想要的子域名是否可用，查看已注册域名的详细信息</p>
-
-                <!-- 子域名检测功能 -->
-                <div class="subdomain-checker">
-                    
-                    <div class="checker-form">
-                        <div class="domain-selector">
-                            <label for="domainSelect">主域名：</label>
-                            <select id="domainSelect" class="domain-select">
-                                <option value="ciao.su" data-status="available">ciao.su</option>
-                                <option value="ciallo.de" data-status="paused">ciallo.de (暂停)</option>
-                            </select>
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
                         </div>
-
-                        <div class="input-group">
-                            <input type="text" id="subdomainInput" placeholder="输入子域名（3-63字符）" maxlength="63">
-                            <span class="domain-suffix" id="domainSuffix">.ciao.su</span>
-                            <button id="checkButton" class="btn btn-check">检测</button>
+                        <div class="feature-content">
+                            <h3>全球可达</h3>
+                            <p>基于全球 DNS 网络，确保域名在世界各地都能快速解析</p>
                         </div>
-                        
-                        <div class="checker-result" id="checkerResult">
-                            <div class="result-content">
-                                <div class="result-header">
-                                    <div class="result-icon"></div>
-                                    <div class="result-status">
-                                        <h4 class="result-title"></h4>
-                                        <p class="result-subtitle"></p>
-                                    </div>
-                                </div>
-                                <div class="result-details">
-                                    <div class="domain-info" id="domainInfo">
-                                        <h5>🔍 域名详情</h5>
-                                        <div class="info-grid">
-                                            <div class="info-item">
-                                                <span class="info-label">域名</span>
-                                                <span class="info-value" id="domainName">-</span>
-                                            </div>
-                                            <div class="info-item">
-                                                <span class="info-label">状态</span>
-                                                <span class="info-value" id="domainStatus">-</span>
-                                            </div>
-                                            <div class="info-item">
-                                                <span class="info-label">注册时间</span>
-                                                <span class="info-value" id="registrationDate">-</span>
-                                            </div>
-                                            <div class="info-item">
-                                                <span class="info-label">所有者</span>
-                                                <span class="info-value" id="domainOwner">-</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stats-and-recent">
-                        <div class="checker-stats">
-                            <div class="stat-card">
-                                <span class="stat-number" id="totalDomains">-</span>
-                                <span class="stat-label">当前域名</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-number">∞</span>
-                                <span class="stat-label">可申请</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-number" id="activeDomains">-</span>
-                                <span class="stat-label">全部注册</span>
-                            </div>
-                        </div>
-
-                        <div class="recent-domains">
-                            <h4>最近注册</h4>
-                            <div class="domains-grid" id="recentDomainsList">
-                                <div class="loading">正在加载...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="guide" class="guide">
-            <div class="container">
-                <h2>申请指南</h2>
-                <div class="guide-content">
-                    <div class="steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h3>Fork 仓库</h3>
-                                <p>访问 <a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub 仓库</a> 并 Fork 到你的账户</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h3>创建配置文件</h3>
-                                <p>在 <code>domains/ciao.su/</code> 目录下创建 JSON 配置文件</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h3>填写配置并提交 PR</h3>
-                                <p>按照指定格式填写域名配置信息，提交 Pull Request</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <div class="step-content">
-                                <h3>域名生效</h3>
-                                <p>PR 合并后，域名记录将在几分钟内生效</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="config-example">
-                        <h3>配置文件示例</h3>
-                        <pre><code>{
-  "owner": {
-    "name": "你的名字",
-    "github": "你的GitHub用户名", 
-    "email": "你的邮箱"
-  },
-  "records": [
-    {
-      "type": "A",
-      "name": "@",
-      "content": "185.199.108.153",
-      "ttl": 3600,
-      "proxied": false
-    }
-  ]
-}</code></pre>
-                    </div>
-                </div>
-
-                <div class="rules-container">
-                    <h3>申请规则</h3>
-                    <div class="rules-grid">
-                        <div class="rule-card">
-                            <h4>域名格式</h4>
-                            <ul>
-                                <li>小写字母、数字和连字符组成</li>
-                                <li>长度在 3-63 个字符之间</li>
-                                <li>不能以连字符开头或结尾</li>
-                            </ul>
-                        </div>
-                        <div class="rule-card">
-                            <h4>数量限制</h4>
-                            <ul>
-                                <li>每个用户最多申请 3 个子域名</li>
-                                <li>每个子域名最多 10 个 DNS 记录</li>
-                            </ul>
-                        </div>
-                        <div class="rule-card">
-                            <h4>保留域名</h4>
-                            <ul>
-                                <li>系统保留：www, mail, api, admin</li>
-                                <li>服务保留：cdn, ftp, ns, dns</li>
-                            </ul>
+                        <div class="feature-arrow">
+                            <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="docs" class="docs">
+        <!-- 申请流程区域 -->
+        <section class="process-section">
             <div class="container">
-                <h2>相关文档</h2>
-                <div class="docs-grid">
-                    <a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/user-guide.md" target="_blank" class="doc-card">
-                        <div class="doc-icon">📖</div>
-                        <h3>用户指南</h3>
-                        <p>详细的使用教程和常见问题解答</p>
-                    </a>
-                    <a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/admin-guide.md" target="_blank" class="doc-card">
-                        <div class="doc-icon">👥</div>
-                        <h3>管理员指南</h3>
-                        <p>管理员操作指南和维护说明</p>
-                    </a>
-                    <a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/technical-doc.md" target="_blank" class="doc-card">
-                        <div class="doc-icon">🔧</div>
-                        <h3>技术文档</h3>
-                        <p>技术实现细节和 API 参考</p>
-                    </a>
-                    <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="doc-card">
-                        <div class="doc-icon">📊</div>
-                        <h3>GitHub 仓库</h3>
-                        <p>查看源码，提交 Issue 和 PR</p>
-                    </a>
-                    <a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/terms-of-service.md" target="_blank" class="doc-card">
-                        <div class="doc-icon">📋</div>
-                        <h3>服务条款</h3>
-                        <p>服务使用条款和用户协议</p>
-                    </a>
+                <div class="section-header">
+                    <h2 class="section-title">简单四步，获得你的域名</h2>
+                    <p class="section-subtitle">从申请到生效，只需几分钟</p>
+                </div>
+
+                <div class="process-timeline">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>生成配置</h3>
+                            <p>使用我们的配置生成器，填写域名信息并生成JSON配置文件</p>
+                            <a href="generator-simple.html" class="step-link">
+                                <i class="fas fa-code"></i>
+                                <span>配置生成器</span>
+                            </a>
+                        </div>
+                        <div class="step-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Fork 仓库</h3>
+                            <p>访问 GitHub 仓库并 Fork 到你的账户，准备提交配置文件</p>
+                            <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="step-link">
+                                <i class="fab fa-github"></i>
+                                <span>GitHub 仓库</span>
+                            </a>
+                        </div>
+                        <div class="step-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>提交 PR</h3>
+                            <p>将生成的配置文件添加到相应目录，提交 Pull Request</p>
+                            <div class="step-link disabled">
+                                <i class="fas fa-code-branch"></i>
+                                <span>提交申请</span>
+                            </div>
+                        </div>
+                        <div class="step-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>域名生效</h3>
+                            <p>PR 合并后，域名记录将在几分钟内自动部署并生效</p>
+                            <div class="step-link disabled">
+                                <i class="fas fa-check-circle"></i>
+                                <span>完成</span>
+                            </div>
+                        </div>
+                        <div class="step-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>LibreDomains</h3>
-                    <p>开源的二级域名分发服务</p>
+                    <div class="footer-brand">
+                        <div class="brand-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h3>LibreDomains</h3>
+                            <p>开源的二级域名分发服务</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
                 </div>
+
                 <div class="footer-section">
-                    <h3>链接</h3>
+                    <h4>快速链接</h4>
                     <ul>
-                        <li><a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub</a></li>
-                        <li><a href="https://github.com/bestzwei/LibreDomains/issues" target="_blank">问题反馈</a></li>
+                        <li><a href="query.html">域名查询</a></li>
+                        <li><a href="generator-simple.html">配置生成器</a></li>
+                        <li><a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub 仓库</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section">
-                    <h3>文档</h3>
+                    <h4>文档</h4>
                     <ul>
                         <li><a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/user-guide.md" target="_blank">用户指南</a></li>
                         <li><a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/technical-doc.md" target="_blank">技术文档</a></li>
-                        <li><a href="https://github.com/bestzwei/LibreDomains/blob/main/docs/terms-of-service.md" target="_blank">服务条款</a></li>
+                        <li><a href="https://github.com/bestzwei/LibreDomains/issues" target="_blank">问题反馈</a></li>
                     </ul>
                 </div>
+
+                <div class="footer-section">
+                    <h4>统计信息</h4>
+                    <div class="footer-stats">
+                        <div class="footer-stat">
+                            <span class="stat-number" id="footerTotalDomains">-</span>
+                            <span class="stat-label">已注册域名</span>
+                        </div>
+                        <div class="footer-stat">
+                            <span class="stat-number">2</span>
+                            <span class="stat-label">可用主域名</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div class="footer-bottom">
-                <p>&copy; <span id="year"></span> LibreDomains. 采用 MIT 许可证开源</p>
-                <script>
-                  document.getElementById('year').textContent = new Date().getFullYear();
-                </script>
+                <p>&copy; <span id="currentYear"></span> LibreDomains. 采用 MIT 许可证开源</p>
+                <p>Made with <i class="fas fa-heart"></i> by the open source community</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/home.js"></script>
 </body>
 </html>

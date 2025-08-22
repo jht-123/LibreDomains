@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>域名查询 - LibreDomains</title>
+    <meta name="description" content="查询域名可用性、WHOIS信息和DNS记录">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- 引入现代字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/query.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">LibreDomains</span>
+                    <span class="brand-tagline">自由域名</span>
+                </div>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="query.html" class="nav-link active">
+                    <i class="fas fa-search"></i>
+                    <span>域名查询</span>
+                </a>
+                <a href="generator-simple.html" class="nav-link">
+                    <i class="fas fa-code"></i>
+                    <span>配置生成器</span>
+                </a>
+                <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="nav-link external">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 页面头部 -->
+        <section class="page-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-text">
+                        <h1 class="page-title">
+                            <i class="fas fa-search"></i>
+                            <span>域名查询工具</span>
+                        </h1>
+                        <p class="page-description">
+                            检查域名可用性、查看 WHOIS 信息和 DNS 记录配置
+                        </p>
+                    </div>
+                    <div class="header-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="queryCount">0</span>
+                            <span class="stat-label">今日查询</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="availableCount">0</span>
+                            <span class="stat-label">可用域名</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 查询区域 -->
+        <section class="query-section">
+            <div class="container">
+                <div class="query-container">
+                    <!-- 查询表单 -->
+                    <div class="query-form-wrapper">
+                        <div class="query-tabs">
+                            <button class="tab-btn active" data-tab="availability">
+                                <i class="fas fa-search"></i>
+                                <span>可用性查询</span>
+                            </button>
+                            <button class="tab-btn" data-tab="whois">
+                                <i class="fas fa-info-circle"></i>
+                                <span>WHOIS 查询</span>
+                            </button>
+                            <button class="tab-btn" data-tab="dns">
+                                <i class="fas fa-network-wired"></i>
+                                <span>DNS 查询</span>
+                            </button>
+                        </div>
+
+                        <div class="query-form">
+                            <div class="domain-input-container">
+                                <div class="input-group">
+                                    <div class="input-wrapper">
+                                        <input type="text"
+                                               id="subdomainInput"
+                                               class="domain-input"
+                                               placeholder="输入子域名"
+                                               autocomplete="off"
+                                               spellcheck="false">
+                                        <span class="input-separator">.</span>
+                                        <select id="domainSelect" class="domain-select">
+                                            <option value="ciao.su">ciao.su</option>
+                                            <option value="ciallo.de">ciallo.de</option>
+                                        </select>
+                                    </div>
+                                    <button id="queryBtn" class="query-btn">
+                                        <i class="fas fa-search"></i>
+                                        <span>查询</span>
+                                    </button>
+                                </div>
+
+                                <div class="input-hints">
+                                    <div class="hint-item">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>长度：3-63个字符</span>
+                                    </div>
+                                    <div class="hint-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>支持：字母、数字、连字符</span>
+                                    </div>
+                                    <div class="hint-item">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>不能以连字符开头或结尾</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 快速查询建议 -->
+                            <div class="quick-suggestions">
+                                <h4>快速查询建议</h4>
+                                <div class="suggestions-grid">
+                                    <button class="suggestion-btn" data-subdomain="blog">
+                                        <i class="fas fa-blog"></i>
+                                        <span>blog</span>
+                                    </button>
+                                    <button class="suggestion-btn" data-subdomain="api">
+                                        <i class="fas fa-code"></i>
+                                        <span>api</span>
+                                    </button>
+                                    <button class="suggestion-btn" data-subdomain="app">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>app</span>
+                                    </button>
+                                    <button class="suggestion-btn" data-subdomain="dev">
+                                        <i class="fas fa-laptop-code"></i>
+                                        <span>dev</span>
+                                    </button>
+                                    <button class="suggestion-btn" data-subdomain="docs">
+                                        <i class="fas fa-book"></i>
+                                        <span>docs</span>
+                                    </button>
+                                    <button class="suggestion-btn" data-subdomain="cdn">
+                                        <i class="fas fa-cloud"></i>
+                                        <span>cdn</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 查询结果 -->
+                    <div class="query-results" id="queryResults">
+                        <div class="result-placeholder">
+                            <div class="placeholder-animation">
+                                <div class="search-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="search-waves">
+                                    <div class="wave"></div>
+                                    <div class="wave"></div>
+                                    <div class="wave"></div>
+                                </div>
+                            </div>
+                            <h3>开始查询域名</h3>
+                            <p>输入子域名并选择主域名，然后点击查询按钮获取详细信息</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 查询历史 -->
+        <section class="query-history">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">查询历史</h2>
+                    <p class="section-subtitle">最近的查询记录</p>
+                </div>
+
+                <div class="history-container" id="historyContainer">
+                    <div class="history-placeholder">
+                        <i class="fas fa-history"></i>
+                        <p>暂无查询历史</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="brand-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h3>LibreDomains</h3>
+                            <p>开源的二级域名分发服务</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="generator-simple.html">配置生成器</a></li>
+                        <li><a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub 仓库</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>查询工具</h4>
+                    <ul>
+                        <li><a href="#" data-tab="availability">可用性查询</a></li>
+                        <li><a href="#" data-tab="whois">WHOIS 查询</a></li>
+                        <li><a href="#" data-tab="dns">DNS 查询</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> LibreDomains. 采用 MIT 许可证开源</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/query.js"></script>
+</body>
+</html>

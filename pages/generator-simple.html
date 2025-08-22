@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置生成器 - LibreDomains</title>
+    <meta name="description" content="快速生成域名申请配置文件">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- 字体和图标 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    
+    <style>
+        .generator-section {
+            padding: 1rem 0 2rem;
+            background: var(--bg-secondary);
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+        
+        .generator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .generator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .wizard-column {
+            position: relative;
+        }
+
+        /* 步骤指示器 */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            max-width: 120px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: var(--transition);
+            border: 2px solid var(--border-color);
+        }
+
+        .step-item.active .step-number {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .step-item.completed .step-number {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .step-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .step-item.active .step-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .step-item.completed .step-label {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        /* 向导步骤 */
+        .wizard-step {
+            display: none;
+            animation: fadeInSlide 0.3s ease-out;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .step-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+        }
+
+        .step-navigation .btn {
+            min-width: 120px;
+        }
+        
+        .generator-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .card-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-grid-compact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem 1rem;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .dns-help {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .help-item {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .help-item strong {
+            color: var(--text-primary);
+        }
+
+        .dns-records-table {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .records-header {
+            background: var(--bg-tertiary);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .records-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .records-body {
+            padding: 0.75rem;
+        }
+
+        .record-row {
+            display: grid;
+            grid-template-columns: 80px 80px 1fr 60px 40px;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 0.5rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .record-row:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .record-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .validation-message {
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .validation-message.error {
+            color: var(--error-color);
+        }
+
+        .validation-message.success {
+            color: var(--success-color);
+        }
+        
+        .config-preview {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: calc(100vh - 350px);
+            min-height: 250px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+        }
+
+        .status-indicator.valid {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-indicator.invalid {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .config-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .wizard-column {
+            max-height: calc(100vh - 90px);
+            overflow-y: auto;
+        }
+
+        .preview-column {
+            position: sticky;
+            top: 90px;
+            max-height: calc(100vh - 100px);
+        }
+
+        .form-input.error {
+            border-color: var(--error-color);
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .form-input.success {
+            border-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .record-row .form-select,
+        .record-row .form-input {
+            font-size: 0.875rem;
+            padding: 0.5rem;
+        }
+
+        .record-row .btn {
+            padding: 0.5rem;
+            min-width: auto;
+        }
+        
+        @media (max-width: 1024px) {
+            .generator-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .step-indicator::before {
+                width: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .generator-section {
+                padding: 5rem 0 2rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .form-grid,
+            .form-grid-compact {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+
+            .help-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .record-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+
+            .config-stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .step-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step-navigation .btn {
+                width: 100%;
+            }
+
+
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-name">LibreDomains</div>
+                    <div class="brand-tagline">免费域名服务</div>
+                </div>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="query.html" class="nav-link">
+                    <i class="fas fa-search"></i>
+                    <span>域名查询</span>
+                </a>
+                <a href="generator-simple.html" class="nav-link active">
+                    <i class="fas fa-code"></i>
+                    <span>配置生成器</span>
+                </a>
+                <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="nav-link external">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 生成器区域 -->
+        <section class="generator-section">
+            <div class="container">
+                <div class="generator-container">
+                    <div class="generator-card">
+                        <div class="card-body">
+                            <div class="generator-layout">
+                                <!-- 左列：步骤向导 -->
+                                <div class="wizard-column">
+                                    <!-- 步骤指示器 -->
+                                    <div class="step-indicator">
+                                        <div class="step-item active" data-step="1">
+                                            <div class="step-number">1</div>
+                                            <div class="step-label">基本信息</div>
+                                        </div>
+                                        <div class="step-item" data-step="2">
+                                            <div class="step-number">2</div>
+                                            <div class="step-label">DNS配置</div>
+                                        </div>
+                                    </div>
+
+                                    <form id="generatorForm">
+                                        <!-- 步骤1：基本信息 -->
+                                        <div class="wizard-step active" id="step1">
+                                            <div class="step-content">
+                                                <h3 class="step-title">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    填写基本信息
+                                                </h3>
+
+                                                <div class="quick-actions">
+                                                    <button type="button" id="importBtn" class="btn btn-outline">
+                                                        <i class="fas fa-paste"></i>
+                                                        <span>从剪贴板导入</span>
+                                                    </button>
+                                                    <button type="button" id="clearBtn" class="btn btn-outline">
+                                                        <i class="fas fa-refresh"></i>
+                                                        <span>重置</span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="form-grid-compact">
+                                                    <div class="form-group">
+                                                        <label class="form-label required">子域名</label>
+                                                        <input type="text" id="subdomain" class="form-input" placeholder="例如：mysite" required>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label">域名后缀</label>
+                                                        <select id="domain" class="form-select">
+                                                            <option value="ciao.su">ciao.su</option>
+                                                            <option value="ciallo.de">ciallo.de</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label required">您的姓名</label>
+                                                        <input type="text" id="ownerName" class="form-input" placeholder="张三" required>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label required">GitHub用户名</label>
+                                                        <input type="text" id="github" class="form-input" placeholder="username" required>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label required">邮箱地址</label>
+                                                        <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label">项目描述</label>
+                                                        <input type="text" id="description" class="form-input" placeholder="简要描述您的项目或网站用途">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="step-navigation">
+                                                <button type="button" id="nextStep1" class="btn btn-primary">
+                                                    <span>下一步</span>
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- 步骤2：DNS配置 -->
+                                        <div class="wizard-step" id="step2">
+                                            <div class="step-content">
+                                                <h3 class="step-title">
+                                                    <i class="fas fa-network-wired"></i>
+                                                    配置DNS记录
+                                                </h3>
+
+                                                <div class="dns-help">
+                                                    <div class="help-grid">
+                                                        <div class="help-item">
+                                                            <strong>A：</strong> IPv4地址
+                                                        </div>
+                                                        <div class="help-item">
+                                                            <strong>AAAA：</strong> IPv6地址
+                                                        </div>
+                                                        <div class="help-item">
+                                                            <strong>CNAME：</strong> 域名别名
+                                                        </div>
+                                                        <div class="help-item">
+                                                            <strong>TXT：</strong> 文本记录
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="dns-records-table">
+                                                    <div class="records-header">
+                                                        <div class="records-title">
+                                                            <i class="fas fa-list"></i>
+                                                            DNS记录列表
+                                                        </div>
+                                                        <button type="button" id="addRecordBtn" class="btn btn-outline">
+                                                            <i class="fas fa-plus"></i>
+                                                            <span>添加</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="records-body" id="dnsRecords">
+                                                        <!-- DNS记录将在这里动态添加 -->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="step-navigation">
+                                                <button type="button" id="prevStep2" class="btn btn-outline">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    <span>上一步</span>
+                                                </button>
+                                                <button type="button" id="generateBtn" class="btn btn-primary">
+                                                    <span>生成配置</span>
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- 右列：配置预览 -->
+                                <div class="preview-column">
+                                    <div class="form-section">
+                                        <h3 class="section-title">
+                                            <i class="fas fa-eye"></i>
+                                            配置预览
+                                        </h3>
+
+                                        <div class="config-preview" id="configPreview">
+                                            请填写左侧信息...
+                                        </div>
+
+                                        <div class="action-buttons">
+                                            <button type="button" id="copyBtn" class="btn btn-outline">
+                                                <i class="fas fa-copy"></i>
+                                                <span>复制配置</span>
+                                            </button>
+                                            <button type="button" id="downloadBtn" class="btn btn-primary">
+                                                <i class="fas fa-download"></i>
+                                                <span>下载文件</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="brand-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h3>LibreDomains</h3>
+                            <p>开源的二级域名分发服务</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="query.html">域名查询</a></li>
+                        <li><a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub 仓库</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> LibreDomains. 采用 MIT 许可证开源</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/generator-simple.js"></script>
+</body>
+</html>

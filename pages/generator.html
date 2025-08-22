@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置生成器 - LibreDomains</title>
+    <meta name="description" content="快速生成域名申请配置文件">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- 引入现代字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/generator.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">LibreDomains</span>
+                    <span class="brand-tagline">自由域名</span>
+                </div>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="query.html" class="nav-link">
+                    <i class="fas fa-search"></i>
+                    <span>域名查询</span>
+                </a>
+                <a href="generator.html" class="nav-link active">
+                    <i class="fas fa-code"></i>
+                    <span>配置生成器</span>
+                </a>
+                <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="nav-link external">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 页面头部 -->
+        <section class="page-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-text">
+                        <h1 class="page-title">
+                            <i class="fas fa-code"></i>
+                            <span>配置生成器</span>
+                        </h1>
+                        <p class="page-description">
+                            填写表单信息，自动生成域名申请配置文件
+                        </p>
+                    </div>
+                    <div class="header-progress">
+                        <div class="progress-steps">
+                            <div class="progress-step active" data-step="1">
+                                <div class="step-number">1</div>
+                                <div class="step-label">基本信息</div>
+                            </div>
+                            <div class="progress-step" data-step="2">
+                                <div class="step-number">2</div>
+                                <div class="step-label">DNS记录</div>
+                            </div>
+                            <div class="progress-step" data-step="3">
+                                <div class="step-number">3</div>
+                                <div class="step-label">生成配置</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 配置生成器 -->
+        <section class="generator-section">
+            <div class="container">
+                <div class="generator-container">
+                    <!-- 表单区域 -->
+                    <div class="form-wrapper">
+                        <form id="configForm" class="config-form">
+                            <!-- 步骤1：基本信息 -->
+                            <div class="form-step active" id="step1">
+                                <div class="step-header">
+                                    <h2>基本信息</h2>
+                                    <p>填写域名和所有者信息</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="subdomain" class="form-label">
+                                        <i class="fas fa-globe"></i>
+                                        <span>子域名</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="domain-input-group">
+                                        <input type="text"
+                                               id="subdomain"
+                                               name="subdomain"
+                                               class="form-input"
+                                               placeholder="输入子域名"
+                                               required>
+                                        <span class="domain-separator">.</span>
+                                        <select id="domain" name="domain" class="form-select" required>
+                                            <option value="ciao.su">ciao.su</option>
+                                            <option value="ciallo.de">ciallo.de</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-hint">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>3-63个字符，支持字母、数字、连字符</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description" class="form-label">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>描述</span>
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input type="text"
+                                           id="description"
+                                           name="description"
+                                           class="form-input"
+                                           placeholder="简要描述这个域名的用途"
+                                           required>
+                                    <div class="form-hint">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <span>例如：个人博客、项目展示、API服务等</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ownerName" class="form-label">
+                                            <i class="fas fa-user"></i>
+                                            <span>姓名</span>
+                                            <span class="required">*</span>
+                                        </label>
+                                        <input type="text"
+                                               id="ownerName"
+                                               name="ownerName"
+                                               class="form-input"
+                                               placeholder="你的姓名"
+                                               required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="github" class="form-label">
+                                            <i class="fab fa-github"></i>
+                                            <span>GitHub 用户名</span>
+                                            <span class="required">*</span>
+                                        </label>
+                                        <input type="text"
+                                               id="github"
+                                               name="github"
+                                               class="form-input"
+                                               placeholder="GitHub用户名"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>邮箱</span>
+                                    </label>
+                                    <input type="email"
+                                           id="email"
+                                           name="email"
+                                           class="form-input"
+                                           placeholder="你的邮箱地址（可选）">
+                                    <div class="form-hint">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>邮箱地址是可选的，不会公开显示</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤2：DNS记录 -->
+                            <div class="form-step" id="step2">
+                                <div class="step-header">
+                                    <h2>DNS 记录配置</h2>
+                                    <p>添加你需要的DNS记录</p>
+                                </div>
+
+                                <div class="dns-records-container" id="dnsRecordsContainer">
+                                    <!-- DNS记录模板 -->
+                                    <div class="dns-record-item">
+                                        <div class="record-header">
+                                            <h4>DNS 记录 #1</h4>
+                                            <button type="button" class="remove-record-btn" style="display: none;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="record-form">
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label class="form-label">
+                                                        <i class="fas fa-tag"></i>
+                                                        <span>记录类型</span>
+                                                    </label>
+                                                    <select name="recordType" class="form-select record-type-select" required>
+                                                        <option value="A">A - IPv4 地址</option>
+                                                        <option value="AAAA">AAAA - IPv6 地址</option>
+                                                        <option value="CNAME">CNAME - 别名记录</option>
+                                                        <option value="TXT">TXT - 文本记录</option>
+                                                        <option value="MX">MX - 邮件记录</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="form-label">
+                                                        <i class="fas fa-at"></i>
+                                                        <span>记录名称</span>
+                                                    </label>
+                                                    <select name="recordName" class="form-select record-name-select" required>
+                                                        <option value="@">@ (根域名)</option>
+                                                        <option value="www">www</option>
+                                                        <option value="*">* (通配符)</option>
+                                                        <option value="custom">自定义...</option>
+                                                    </select>
+                                                    <input type="text"
+                                                           name="customRecordName"
+                                                           class="form-input custom-name-input"
+                                                           placeholder="输入自定义名称"
+                                                           style="display: none;">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">
+                                                    <i class="fas fa-link"></i>
+                                                    <span class="record-content-label">记录值</span>
+                                                </label>
+                                                <input type="text"
+                                                       name="recordContent"
+                                                       class="form-input record-content-input"
+                                                       placeholder="输入记录值"
+                                                       required>
+                                                <div class="form-hint record-hint">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <span class="record-hint-text">输入IPv4地址，例如：192.168.1.1</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label class="form-label">
+                                                        <i class="fas fa-clock"></i>
+                                                        <span>TTL (秒)</span>
+                                                    </label>
+                                                    <select name="recordTtl" class="form-select" required>
+                                                        <option value="300">300 (5分钟)</option>
+                                                        <option value="1800">1800 (30分钟)</option>
+                                                        <option value="3600" selected>3600 (1小时)</option>
+                                                        <option value="14400">14400 (4小时)</option>
+                                                        <option value="86400">86400 (1天)</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="form-label">
+                                                        <i class="fas fa-shield-alt"></i>
+                                                        <span>Cloudflare 代理</span>
+                                                    </label>
+                                                    <div class="toggle-switch">
+                                                        <input type="checkbox"
+                                                               name="recordProxied"
+                                                               class="toggle-input"
+                                                               id="proxied1">
+                                                        <label for="proxied1" class="toggle-label">
+                                                            <span class="toggle-slider"></span>
+                                                        </label>
+                                                        <span class="toggle-text">启用代理</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dns-actions">
+                                    <button type="button" id="addRecordBtn" class="btn btn-outline">
+                                        <i class="fas fa-plus"></i>
+                                        <span>添加记录</span>
+                                    </button>
+
+                                    <div class="preset-templates">
+                                        <h4>快速模板</h4>
+                                        <div class="template-buttons">
+                                            <button type="button" class="template-btn" data-template="github-pages">
+                                                <i class="fab fa-github"></i>
+                                                <span>GitHub Pages</span>
+                                            </button>
+                                            <button type="button" class="template-btn" data-template="vercel">
+                                                <i class="fas fa-cloud"></i>
+                                                <span>Vercel</span>
+                                            </button>
+                                            <button type="button" class="template-btn" data-template="netlify">
+                                                <i class="fas fa-server"></i>
+                                                <span>Netlify</span>
+                                            </button>
+                                            <button type="button" class="template-btn" data-template="custom-server">
+                                                <i class="fas fa-desktop"></i>
+                                                <span>自定义服务器</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 步骤3：生成配置 -->
+                            <div class="form-step" id="step3">
+                                <div class="step-header">
+                                    <h2>生成配置文件</h2>
+                                    <p>预览并下载你的配置文件</p>
+                                </div>
+
+                                <div class="config-preview">
+                                    <div class="preview-header">
+                                        <h3>配置文件预览</h3>
+                                        <div class="preview-actions">
+                                            <button type="button" id="copyConfigBtn" class="btn btn-outline">
+                                                <i class="fas fa-copy"></i>
+                                                <span>复制</span>
+                                            </button>
+                                            <button type="button" id="downloadConfigBtn" class="btn btn-primary">
+                                                <i class="fas fa-download"></i>
+                                                <span>下载</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="config-content">
+                                        <pre><code id="configOutput" class="language-json">{
+  "description": "",
+  "owner": {
+    "name": "",
+    "github": "",
+    "email": ""
+  },
+  "records": []
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div class="next-steps">
+                                    <h3>下一步操作</h3>
+                                    <div class="steps-list">
+                                        <div class="next-step">
+                                            <div class="step-icon">
+                                                <i class="fab fa-github"></i>
+                                            </div>
+                                            <div class="step-content">
+                                                <h4>1. Fork 仓库</h4>
+                                                <p>访问 GitHub 仓库并 Fork 到你的账户</p>
+                                                <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="step-link">
+                                                    <i class="fas fa-external-link-alt"></i>
+                                                    <span>前往 GitHub</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="next-step">
+                                            <div class="step-icon">
+                                                <i class="fas fa-file-upload"></i>
+                                            </div>
+                                            <div class="step-content">
+                                                <h4>2. 上传配置文件</h4>
+                                                <p>将生成的配置文件保存为 <code id="fileName">subdomain.json</code> 并上传到相应目录</p>
+                                                <div class="file-path">
+                                                    <code>domains/<span id="domainPath">ciao.su</span>/<span id="fileNamePath">subdomain.json</span></code>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="next-step">
+                                            <div class="step-icon">
+                                                <i class="fas fa-code-branch"></i>
+                                            </div>
+                                            <div class="step-content">
+                                                <h4>3. 提交 Pull Request</h4>
+                                                <p>创建 Pull Request 并等待审核</p>
+                                                <div class="step-link disabled">
+                                                    <i class="fas fa-hourglass-half"></i>
+                                                    <span>等待审核</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 表单导航 -->
+                            <div class="form-navigation">
+                                <button type="button" id="prevBtn" class="btn btn-secondary" style="display: none;">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>上一步</span>
+                                </button>
+
+                                <button type="button" id="nextBtn" class="btn btn-primary">
+                                    <span>下一步</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+
+                                <button type="button" id="generateBtn" class="btn btn-success" style="display: none;">
+                                    <i class="fas fa-magic"></i>
+                                    <span>生成配置</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="brand-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h3>LibreDomains</h3>
+                            <p>开源的二级域名分发服务</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="query.html">域名查询</a></li>
+                        <li><a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub 仓库</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>配置模板</h4>
+                    <ul>
+                        <li><a href="#" data-template="github-pages">GitHub Pages</a></li>
+                        <li><a href="#" data-template="vercel">Vercel</a></li>
+                        <li><a href="#" data-template="netlify">Netlify</a></li>
+                        <li><a href="#" data-template="custom-server">自定义服务器</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> LibreDomains. 采用 MIT 许可证开源</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/generator.js"></script>
+</body>
+</html>
