@@ -67,11 +67,11 @@
                 <div class="header-content">
                     <div class="header-text">
                         <h1 class="page-title">
-                            <i class="fas fa-search"></i>
-                            <span>域名查询工具</span>
+                            <i class="fas fa-info-circle"></i>
+                            <span>WHOIS 域名查询</span>
                         </h1>
                         <p class="page-description">
-                            检查域名可用性、查看 WHOIS 信息和 DNS 记录配置
+                            查询已注册域名的 WHOIS 信息和 DNS 记录配置
                         </p>
                     </div>
                     <div class="header-stats">
@@ -80,8 +80,8 @@
                             <span class="stat-label">今日查询</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number" id="availableCount">0</span>
-                            <span class="stat-label">可用域名</span>
+                            <span class="stat-number" id="registeredCount">0</span>
+                            <span class="stat-label">已注册域名</span>
                         </div>
                     </div>
                 </div>
@@ -95,17 +95,9 @@
                     <!-- 查询表单 -->
                     <div class="query-form-wrapper">
                         <div class="query-tabs">
-                            <button class="tab-btn active" data-tab="availability">
-                                <i class="fas fa-search"></i>
-                                <span>可用性查询</span>
-                            </button>
-                            <button class="tab-btn" data-tab="whois">
+                            <button class="tab-btn active" data-tab="whois">
                                 <i class="fas fa-info-circle"></i>
                                 <span>WHOIS 查询</span>
-                            </button>
-                            <button class="tab-btn" data-tab="dns">
-                                <i class="fas fa-network-wired"></i>
-                                <span>DNS 查询</span>
                             </button>
                         </div>
 
@@ -134,47 +126,24 @@
                                 <div class="input-hints">
                                     <div class="hint-item">
                                         <i class="fas fa-info-circle"></i>
-                                        <span>长度：3-63个字符</span>
+                                        <span>查询已注册的子域名信息</span>
                                     </div>
                                     <div class="hint-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>支持：字母、数字、连字符</span>
+                                        <i class="fas fa-database"></i>
+                                        <span>数据来源：LibreDomains 仓库</span>
                                     </div>
                                     <div class="hint-item">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                        <span>不能以连字符开头或结尾</span>
+                                        <i class="fas fa-clock"></i>
+                                        <span>实时更新</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 快速查询建议 -->
+                            <!-- 已注册域名示例 -->
                             <div class="quick-suggestions">
-                                <h4>快速查询建议</h4>
-                                <div class="suggestions-grid">
-                                    <button class="suggestion-btn" data-subdomain="blog">
-                                        <i class="fas fa-blog"></i>
-                                        <span>blog</span>
-                                    </button>
-                                    <button class="suggestion-btn" data-subdomain="api">
-                                        <i class="fas fa-code"></i>
-                                        <span>api</span>
-                                    </button>
-                                    <button class="suggestion-btn" data-subdomain="app">
-                                        <i class="fas fa-mobile-alt"></i>
-                                        <span>app</span>
-                                    </button>
-                                    <button class="suggestion-btn" data-subdomain="dev">
-                                        <i class="fas fa-laptop-code"></i>
-                                        <span>dev</span>
-                                    </button>
-                                    <button class="suggestion-btn" data-subdomain="docs">
-                                        <i class="fas fa-book"></i>
-                                        <span>docs</span>
-                                    </button>
-                                    <button class="suggestion-btn" data-subdomain="cdn">
-                                        <i class="fas fa-cloud"></i>
-                                        <span>cdn</span>
-                                    </button>
+                                <h4>已注册域名示例</h4>
+                                <div class="suggestions-grid" id="registeredExamples">
+                                    <!-- 动态加载已注册的域名 -->
                                 </div>
                             </div>
                         </div>
@@ -185,7 +154,7 @@
                         <div class="result-placeholder">
                             <div class="placeholder-animation">
                                 <div class="search-icon">
-                                    <i class="fas fa-search"></i>
+                                    <i class="fas fa-info-circle"></i>
                                 </div>
                                 <div class="search-waves">
                                     <div class="wave"></div>
@@ -193,8 +162,8 @@
                                     <div class="wave"></div>
                                 </div>
                             </div>
-                            <h3>开始查询域名</h3>
-                            <p>输入子域名并选择主域名，然后点击查询按钮获取详细信息</p>
+                            <h3>开始 WHOIS 查询</h3>
+                            <p>输入已注册的子域名，查看其注册信息和 DNS 配置</p>
                         </div>
                     </div>
                 </div>
@@ -247,9 +216,9 @@
                 <div class="footer-section">
                     <h4>查询工具</h4>
                     <ul>
-                        <li><a href="#" data-tab="availability">可用性查询</a></li>
                         <li><a href="#" data-tab="whois">WHOIS 查询</a></li>
-                        <li><a href="#" data-tab="dns">DNS 查询</a></li>
+                        <li><a href="generator-simple.html">配置生成器</a></li>
+                        <li><a href="https://github.com/bestzwei/LibreDomains" target="_blank">GitHub 仓库</a></li>
                     </ul>
                 </div>
             </div>
@@ -261,6 +230,7 @@
     </footer>
 
     <script src="assets/js/common.js"></script>
+    <script src="assets/js/domain-api.js"></script>
     <script src="assets/js/query.js"></script>
 </body>
 </html>

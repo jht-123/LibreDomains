@@ -1,14 +1,16 @@
-// 查询页面专用 JavaScript 文件
+// WHOIS 查询页面专用 JavaScript 文件
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化查询页面功能
     initQuerySystem();
-    initSuggestions();
     initHistory();
     updateStats();
+    loadRegisteredExamples();
+    loadDomainData();
 });
 
-let currentTab = 'availability';
+let currentTab = 'whois';
 let queryHistory = JSON.parse(localStorage.getItem('queryHistory') || '[]');
+let domainData = {}; // 缓存从仓库加载的域名数据
 
 // 初始化查询系统
 function initQuerySystem() {
@@ -53,12 +55,17 @@ function initQuerySystem() {
     }
 
     // 执行查询
-    function performQuery() {
+    async function performQuery() {
         const subdomain = subdomainInput.value.trim().toLowerCase();
         const domain = domainSelect.value;
 
-        if (!LibreDomains.validateSubdomain(subdomain)) {
-            showError('请输入有效的子域名');
+        if (!subdomain) {
+            showError('请输入子域名');
+            return;
+        }
+
+        if (subdomain.length < 1 || subdomain.length > 63) {
+            showError('子域名长度应在1-63个字符之间');
             return;
         }
 
@@ -70,18 +77,8 @@ function initQuerySystem() {
         // 添加到历史记录
         addToHistory(fullDomain, currentTab);
 
-        // 根据当前标签页执行不同的查询
-        switch (currentTab) {
-            case 'availability':
-                checkAvailability(fullDomain, subdomain, domain);
-                break;
-            case 'whois':
-                performWhoisQuery(fullDomain);
-                break;
-            case 'dns':
-                performDnsQuery(fullDomain);
-                break;
-        }
+        // 执行WHOIS查询
+        await performWhoisQuery(fullDomain, subdomain, domain);
 
         // 更新统计
         updateQueryCount();
@@ -90,18 +87,7 @@ function initQuerySystem() {
     // 更新占位符
     function updatePlaceholder() {
         if (!subdomainInput) return;
-
-        switch (currentTab) {
-            case 'availability':
-                subdomainInput.placeholder = '输入子域名检查可用性';
-                break;
-            case 'whois':
-                subdomainInput.placeholder = '输入子域名查看WHOIS信息';
-                break;
-            case 'dns':
-                subdomainInput.placeholder = '输入子域名查看DNS记录';
-                break;
-        }
+        subdomainInput.placeholder = '输入已注册的子域名';
     }
 }
 
@@ -164,19 +150,25 @@ function checkAvailability(fullDomain, subdomain, domain) {
 
         if (isAvailable) {
             showAvailabilityResult(fullDomain, true);
-            updateAvailableCount();
         } else {
             showAvailabilityResult(fullDomain, false, getDomainInfo(subdomain, domain));
+            updateRegisteredCount();
         }
     }, 1500);
 }
 
 // WHOIS查询
-function performWhoisQuery(fullDomain) {
-    setTimeout(() => {
-        const domainInfo = getDomainInfo(fullDomain.split('.')[0], fullDomain.split('.').slice(1).join('.'));
+async function performWhoisQuery(fullDomain, subdomain, domain) {
+    try {
+        const domainInfo = await getRealDomainInfo(subdomain, domain);
         showWhoisResult(fullDomain, domainInfo);
-    }, 2000);
+        if (domainInfo) {
+            updateRegisteredCount();
+        }
+    } catch (error) {
+        console.error('WHOIS查询失败:', error);
+        showWhoisResult(fullDomain, null);
+    }
 }
 
 // DNS查询
@@ -238,21 +230,99 @@ function showWhoisResult(domain, domainInfo) {
     const queryResults = document.getElementById('queryResults');
 
     if (domainInfo) {
+        const dnsRecordsHtml = domainInfo.records ? domainInfo.records.map(record => `
+            <div class="dns-record">
+                <div class="record-type ${record.type.toLowerCase()}">${record.type}</div>
+                <div class="record-details">
+                    <div class="record-name">${record.name === '@' ? domain : record.name + '.' + domain}</div>
+                    <div class="record-content">${record.content}</div>
+                    <div class="record-meta">
+                        TTL: ${record.ttl}s
+                        ${record.proxied ? '<span class="proxied">• 已代理</span>' : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('') : '';
+
         queryResults.innerHTML = `
-            <div class="result-whois">
-                <div class="result-icon">
-                    <i class="fas fa-info-circle"></i>
+            <div class="result-info">
+                <div class="result-header">
+                    <div class="result-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="result-title">
+                        <h3>WHOIS 信息</h3>
+                        <div class="domain-name">${domain}</div>
+                    </div>
                 </div>
-                <h3>WHOIS 信息</h3>
-                <div class="domain-name">${domain}</div>
-                <div class="whois-details">
-                    ${generateDomainInfoHtml(domainInfo)}
+
+                <div class="domain-details">
+                    <div class="detail-section">
+                        <h4>注册信息</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">注册者</span>
+                                <span class="info-value">${domainInfo.owner?.name || '未知'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">注册时间</span>
+                                <span class="info-value">${formatDate(domainInfo.created)}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">状态</span>
+                                <span class="info-value status-active">${domainInfo.status || '活跃'}</span>
+                            </div>
+                            ${domainInfo.owner?.github ? `
+                            <div class="info-item">
+                                <span class="info-label">GitHub</span>
+                                <span class="info-value">
+                                    <a href="https://github.com/${domainInfo.owner.github}" target="_blank" rel="noopener">
+                                        <i class="fab fa-github"></i>
+                                        ${domainInfo.owner.github}
+                                    </a>
+                                </span>
+                            </div>
+                            ` : ''}
+                            ${domainInfo.owner?.email ? `
+                            <div class="info-item">
+                                <span class="info-label">邮箱</span>
+                                <span class="info-value">${domainInfo.owner.email}</span>
+                            </div>
+                            ` : ''}
+                            ${domainInfo.description ? `
+                            <div class="info-item full-width">
+                                <span class="info-label">描述</span>
+                                <span class="info-value">${domainInfo.description}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    ${dnsRecordsHtml ? `
+                    <div class="detail-section">
+                        <h4>DNS 记录</h4>
+                        <div class="dns-records">
+                            ${dnsRecordsHtml}
+                        </div>
+                    </div>
+                    ` : ''}
                 </div>
+
                 <div class="result-actions">
-                    <button onclick="copyWhoisInfo('${domain}', ${JSON.stringify(domainInfo).replace(/"/g, '&quot;')})" class="btn btn-outline">
+                    <button onclick="copyToClipboard('${domain}')" class="btn btn-outline">
                         <i class="fas fa-copy"></i>
-                        <span>复制信息</span>
+                        <span>复制域名</span>
                     </button>
+                    ${domainInfo.owner?.github ? `
+                    <a href="https://github.com/${domainInfo.owner.github}" target="_blank" class="btn btn-outline">
+                        <i class="fab fa-github"></i>
+                        <span>访问 GitHub</span>
+                    </a>
+                    ` : ''}
+                    <a href="http://${domain}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>访问网站</span>
+                    </a>
                 </div>
             </div>
         `;
@@ -262,9 +332,19 @@ function showWhoisResult(domain, domainInfo) {
                 <div class="result-icon">
                     <i class="fas fa-question-circle"></i>
                 </div>
-                <h3>未找到信息</h3>
+                <h3>域名未注册</h3>
                 <div class="domain-name">${domain}</div>
-                <p>无法获取该域名的WHOIS信息。</p>
+                <p>该域名尚未在 LibreDomains 注册或信息不可用</p>
+                <div class="result-actions">
+                    <a href="generator-simple.html?domain=${encodeURIComponent(domain)}" class="btn btn-primary">
+                        <i class="fas fa-magic"></i>
+                        <span>立即申请</span>
+                    </a>
+                    <a href="https://github.com/bestzwei/LibreDomains" target="_blank" class="btn btn-outline">
+                        <i class="fab fa-github"></i>
+                        <span>查看仓库</span>
+                    </a>
+                </div>
             </div>
         `;
     }
@@ -359,28 +439,43 @@ function generateDomainInfoHtml(domainInfo) {
 
 // 检查域名是否存在
 function checkIfDomainExists(subdomain, domain) {
-    // 这里应该调用实际的API来检查域名
-    // 目前使用模拟数据
-    const existingDomains = [
-        'www', 'mail', 'api', 'blog', 'docs', 'admin', 'test', 'dev'
-    ];
-
-    return existingDomains.includes(subdomain.toLowerCase());
+    // 使用真实的域名数据检查
+    return domainData[domain] && domainData[domain][subdomain];
 }
 
-// 获取域名信息
-function getDomainInfo(subdomain, domain) {
-    // 模拟域名信息
-    if (checkIfDomainExists(subdomain, domain)) {
-        return {
-            owner: 'LibreDomains用户',
-            created: '2024-01-15',
-            status: '活跃',
-            github: 'example-user',
-            description: '这是一个示例域名配置'
-        };
+// 获取真实域名信息
+async function getRealDomainInfo(subdomain, domain) {
+    // 首先检查缓存
+    if (domainData[domain] && domainData[domain][subdomain]) {
+        return domainData[domain][subdomain];
     }
+
+    // 如果API可用，尝试从API获取
+    if (window.domainAPI) {
+        try {
+            const info = await domainAPI.getDomainInfo(subdomain, domain);
+            if (info) {
+                // 缓存结果
+                if (!domainData[domain]) domainData[domain] = {};
+                domainData[domain][subdomain] = info;
+                return info;
+            }
+        } catch (error) {
+            console.error(`Failed to fetch ${subdomain}.${domain}:`, error);
+        }
+    }
+
     return null;
+}
+
+// 获取域名信息（保留兼容性）
+function getDomainInfo(subdomain, domain) {
+    return getRealDomainInfo(subdomain, domain) || {
+        owner: { name: 'LibreDomains用户', github: 'example-user', email: 'user@example.com' },
+        created: '2024-01-15',
+        status: '活跃',
+        description: '这是一个示例域名配置'
+    };
 }
 
 // 获取DNS记录
@@ -580,17 +675,17 @@ function formatTime(timestamp) {
 // 更新统计数据
 function updateStats() {
     // 更新查询统计
-    const totalQueriesElement = document.getElementById('totalQueries');
-    const availableDomainsElement = document.getElementById('availableDomains');
+    const queryCountElement = document.getElementById('queryCount');
+    const registeredCountElement = document.getElementById('registeredCount');
 
-    if (totalQueriesElement) {
+    if (queryCountElement) {
         const totalQueries = queryHistory.length;
-        totalQueriesElement.textContent = totalQueries;
+        queryCountElement.textContent = totalQueries;
     }
 
-    if (availableDomainsElement) {
-        const availableCount = queryHistory.filter(item => item.result === 'available').length;
-        availableDomainsElement.textContent = availableCount;
+    if (registeredCountElement) {
+        const registeredCount = parseInt(localStorage.getItem('registeredCount') || '0');
+        registeredCountElement.textContent = registeredCount;
     }
 }
 
@@ -598,8 +693,14 @@ function updateQueryCount() {
     updateStats();
 }
 
-function updateAvailableCount() {
-    updateStats();
+function updateRegisteredCount() {
+    const registeredCountElement = document.getElementById('registeredCount');
+    if (registeredCountElement) {
+        let count = parseInt(localStorage.getItem('registeredCount') || '0');
+        count++;
+        localStorage.setItem('registeredCount', count.toString());
+        LibreDomains.animateNumber(registeredCountElement, count);
+    }
 }
 
 // 复制功能
@@ -672,4 +773,186 @@ function tryAlternative(domain) {
         const queryBtn = document.getElementById('queryBtn');
         if (queryBtn) queryBtn.click();
     }, 100);
+}
+
+// 加载域名数据
+async function loadDomainData() {
+    try {
+        if (!window.domainAPI) {
+            console.warn('Domain API not available, using mock data');
+            await loadMockDomainData();
+            return;
+        }
+
+        // 获取可用域名
+        const domains = await domainAPI.getAvailableDomains();
+        console.log('可用域名:', domains);
+
+        // 更新域名选择器
+        updateDomainSelector(domains);
+
+        // 预加载一些域名数据用于示例
+        for (const domain of domains.slice(0, 2)) { // 只预加载前两个域名
+            const subdomains = await domainAPI.getSubdomains(domain);
+            domainData[domain] = {};
+
+            // 预加载前几个子域名的详细信息
+            for (const subdomain of subdomains.slice(0, 5)) {
+                try {
+                    const info = await domainAPI.getDomainInfo(subdomain, domain);
+                    if (info) {
+                        domainData[domain][subdomain] = info;
+                    }
+                } catch (error) {
+                    console.warn(`Failed to load ${subdomain}.${domain}:`, error);
+                }
+            }
+        }
+
+        console.log('域名数据加载完成:', domainData);
+    } catch (error) {
+        console.error('加载域名数据失败:', error);
+        await loadMockDomainData();
+    }
+}
+
+// 更新域名选择器
+function updateDomainSelector(domains) {
+    const domainSelect = document.getElementById('domainSelect');
+    if (!domainSelect || !domains) return;
+
+    domainSelect.innerHTML = '';
+    domains.forEach(domain => {
+        const option = document.createElement('option');
+        option.value = domain;
+        option.textContent = domain;
+        domainSelect.appendChild(option);
+    });
+}
+
+// 模拟加载域名数据（回退方案）
+async function loadMockDomainData() {
+    // 模拟一些已注册的域名数据
+    domainData['ciao.su'] = {
+        'meeting': {
+            owner: { name: 'tsengvee', github: 'tsengvee', email: 'tsengvee@gmail.com' },
+            records: [{ type: 'CNAME', name: '@', content: '2784b4c190d9b763.vercel-dns-017.com', ttl: 3600, proxied: false }],
+            created: '2024-01-15',
+            status: '活跃'
+        },
+        'comi': {
+            owner: { name: 'Comi', github: 'Comi-xf', email: 'comi@disroot.org' },
+            records: [
+                { type: 'CNAME', name: '@', content: 'comi.pages.dev', ttl: 3600, proxied: false },
+                { type: 'CNAME', name: 'www', content: 'comi.pages.dev', ttl: 3600, proxied: false }
+            ],
+            created: '2024-02-10',
+            status: '活跃',
+            description: '个人博客网站'
+        },
+        'ju': {
+            owner: { name: 'JUJU', github: 'justn-gpt', email: 'gjustn@gmail.com' },
+            records: [{ type: 'CNAME', name: 'hk', content: 'libretv-a9l.pages.dev', ttl: 3600, proxied: false }],
+            created: '2024-01-20',
+            status: '活跃'
+        },
+        'xx': {
+            owner: { name: 'oyz', github: 'boosoyz', email: 'boosoyz@gmail.com' },
+            records: [{ type: 'CNAME', name: 'www', content: 'koyeb-16u.pages.dev', ttl: 3600, proxied: true }],
+            created: '2024-01-25',
+            status: '活跃'
+        }
+    };
+
+    domainData['ciallo.de'] = {
+        'example': {
+            owner: { name: 'Example User', github: 'example', email: 'example@example.com' },
+            records: [{ type: 'A', name: '@', content: '192.168.1.1', ttl: 3600, proxied: true }],
+            created: '2024-01-01',
+            status: '活跃'
+        }
+    };
+}
+
+// 加载已注册域名示例
+async function loadRegisteredExamples() {
+    const container = document.getElementById('registeredExamples');
+    if (!container) return;
+
+    try {
+        let examples;
+
+        if (window.domainAPI) {
+            // 使用API获取真实示例
+            examples = await domainAPI.getRandomExamples(6);
+        } else {
+            // 回退到静态示例
+            examples = [
+                { subdomain: 'meeting', domain: 'ciao.su', icon: 'fas fa-video' },
+                { subdomain: 'comi', domain: 'ciao.su', icon: 'fas fa-blog' },
+                { subdomain: 'ju', domain: 'ciao.su', icon: 'fas fa-tv' },
+                { subdomain: 'xx', domain: 'ciao.su', icon: 'fas fa-user' }
+            ];
+        }
+
+        container.innerHTML = examples.map(example => `
+            <button class="suggestion-btn" data-subdomain="${example.subdomain}" data-domain="${example.domain}">
+                <i class="${example.icon}"></i>
+                <span>${example.subdomain}.${example.domain}</span>
+            </button>
+        `).join('');
+
+        // 绑定点击事件
+        container.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const subdomain = this.getAttribute('data-subdomain');
+                const domain = this.getAttribute('data-domain');
+                const subdomainInput = document.getElementById('subdomainInput');
+                const domainSelect = document.getElementById('domainSelect');
+
+                if (subdomainInput && subdomain) {
+                    subdomainInput.value = subdomain;
+                }
+                if (domainSelect && domain) {
+                    domainSelect.value = domain;
+                }
+
+                // 自动执行查询
+                setTimeout(() => {
+                    const queryBtn = document.getElementById('queryBtn');
+                    if (queryBtn) queryBtn.click();
+                }, 100);
+            });
+        });
+    } catch (error) {
+        console.error('加载示例域名失败:', error);
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">加载示例失败</p>';
+    }
+}
+
+// 辅助函数
+function formatDate(dateString) {
+    if (!dateString) return '未知';
+
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    } catch (e) {
+        return dateString;
+    }
+}
+
+function formatTime(dateString) {
+    if (!dateString) return '未知';
+
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString('zh-CN');
+    } catch (e) {
+        return dateString;
+    }
 }

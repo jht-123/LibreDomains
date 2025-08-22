@@ -1,4 +1,4 @@
-/* 查询页面专用样式 - LibreDomains */
+/* WHOIS 查询页面专用样式 - LibreDomains */
 
 /* 页面头部统计 */
 .header-stats {
@@ -745,5 +745,130 @@
 
     .query-results {
         padding: 1.5rem;
+    }
+}
+
+/* WHOIS 结果增强样式 */
+.result-info .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.result-info .info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.result-info .info-item .info-value a {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.result-info .info-item .info-value a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.result-info .dns-records {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.result-info .dns-record {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--primary-color);
+}
+
+.result-info .record-type {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    min-width: 60px;
+    text-align: center;
+}
+
+.result-info .record-type.a {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.result-info .record-type.cname {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.result-info .record-type.txt {
+    background: #e8f5e8;
+    color: #388e3c;
+}
+
+.result-info .record-type.mx {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.result-info .record-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.result-info .record-name {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.result-info .record-content {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    word-break: break-all;
+    margin-bottom: 0.25rem;
+}
+
+.result-info .record-meta {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.result-info .proxied {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .result-info .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-info .dns-record {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .result-info .record-type {
+        align-self: flex-start;
     }
 }
