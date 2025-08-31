@@ -1,5 +1,5 @@
 {
-  "description": "图床访问",
+  "description": "图床访问映射域名",
   "subdomain": "coderwgb",
   "domain": "ciao.su",
   "owner": {
