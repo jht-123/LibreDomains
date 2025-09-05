@@ -10,7 +10,7 @@
     "records": [
         {
             "type": "CNAME",
-            "name": "love",
+            "name": "@",
             "content": "b55df8da554487f7.vercel-dns-017.com",
             "ttl": 3600,
             "proxied": false
