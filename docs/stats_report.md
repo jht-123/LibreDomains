@@ -1,6 +1,6 @@
 # LibreDomains 统计报告
 
-**生成时间**: 2025-09-21 01:40:32
+**生成时间**: 2025-09-28 01:41:18
 
 ## 概览
 
@@ -29,27 +29,27 @@
 | 用户 | 域名数量 |
 |------|----------|
 | @bestZwei | 5 |
-| @boosoyz | 3 |
-| @justn-gpt | 3 |
 | @vipmc838 | 3 |
+| @justn-gpt | 3 |
+| @boosoyz | 3 |
 | @tsengvee | 2 |
-| @Comi-xf | 1 |
-| @H-Soleil | 1 |
-| @Derduan | 1 |
-| @Biiian | 1 |
 | @Yeqingky | 1 |
+| @dsblkkk | 1 |
+| @H-Soleil | 1 |
+| @00ye | 1 |
+| @ifx1 | 1 |
 
 ## 最近添加的域名
 
 | 域名 | 所有者 | 添加时间 |
 |------|--------|----------|
-| xx.ciao.su | @boosoyz | 2025-09-21 01:40:24 |
-| pic.ciao.su | @vipmc838 | 2025-09-21 01:40:24 |
-| sun.ciao.su | @H-Soleil | 2025-09-21 01:40:24 |
-| nezha.ciao.su | @boosoyz | 2025-09-21 01:40:24 |
-| yeqing.ciao.su | @Yeqingky | 2025-09-21 01:40:24 |
-| tv.ciao.su | @bestZwei | 2025-09-21 01:40:24 |
-| test1.ciao.su | @tsengvee | 2025-09-21 01:40:24 |
-| rydx.ciao.su | @clown145 | 2025-09-21 01:40:24 |
-| oo.ciao.su | @boosoyz | 2025-09-21 01:40:24 |
-| lin.ciao.su | @00ye | 2025-09-21 01:40:24 |
+| lunatv.ciao.su | @bestZwei | 2025-09-28 01:41:11 |
+| pic.ciao.su | @vipmc838 | 2025-09-28 01:41:11 |
+| yeqing.ciao.su | @Yeqingky | 2025-09-28 01:41:11 |
+| meeting.ciao.su | @tsengvee | 2025-09-28 01:41:11 |
+| sun.ciao.su | @H-Soleil | 2025-09-28 01:41:11 |
+| moontv.ciao.su | @bestZwei | 2025-09-28 01:41:11 |
+| neo.ciao.su | @Neomanbeta | 2025-09-28 01:41:11 |
+| ok.ciao.su | @justn-gpt | 2025-09-28 01:41:11 |
+| nezha.ciao.su | @boosoyz | 2025-09-28 01:41:11 |
+| xx.ciao.su | @boosoyz | 2025-09-28 01:41:11 |
