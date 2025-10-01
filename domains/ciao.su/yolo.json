@@ -1,0 +1,19 @@
+{
+  "description": "用来做个人网站",
+  "subdomain": "yolo",
+  "domain": "ciao.su",
+  "owner": {
+    "name": "Clina",
+    "github": "Wolffyhtl",
+    "email": "havala@tuta.io"
+  },
+  "records": [
+    {
+      "type": "TXT",
+      "name": "_github-pages-challenge-Wolffyhtl",
+      "content": "063f553d805a5fd03edca938d9e145",
+      "ttl": 3600,
+      "proxied": false
+    }
+  ]
+}
