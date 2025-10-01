@@ -9,9 +9,9 @@
   },
   "records": [
     {
-      "type": "TXT",
-      "name": "_github-pages-challenge-Wolffyhtl",
-      "content": "063f553d805a5fd03edca938d9e145",
+      "type": "CNAME",
+      "name": "@",
+      "content": "f3e4a2ed.yolo.ciao.su.dnsoe3.com.",
       "ttl": 3600,
       "proxied": false
     }
