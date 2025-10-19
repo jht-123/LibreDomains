@@ -1,0 +1,19 @@
+{
+  "description": "搭建博客使用",
+  "subdomain": "nsblog",
+  "domain": "ciao.su",
+  "owner": {
+    "name": "Nextsoft Studio",
+    "github": "LAPTOP-afk",
+    "email": "Xcl18952744869@outlook.com"
+  },
+  "records": [
+    {
+      "type": "CNAME",
+      "name": "@",
+      "content": "mm.yuncname.com",
+      "ttl": 3600,
+      "proxied": false
+    }
+  ]
+}
