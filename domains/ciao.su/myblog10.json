@@ -1,24 +1,17 @@
 {
-  "description": "for freenet",
-  "owner": {
-    "name": "jiao",
-    "github": "jht-123",
-    "email": "1207795808@qq.com"
-  },
-  "records": [
-    {
-      "type": "A",
-      "name": "@",
-      "content": "149.28.85.168",
-      "ttl": 3600,
-      "provided": false
+    "description": "for proxy server",
+    "owner": {
+        "name": "jiao",
+        "github": "jht-123", 
+        "email": "1207795808@qq.com"
     },
-    {
-      "type": "CNAME",
-      "name": "www",
-      "content": "myblog10.ciao.su",
-      "ttl": 3600,
-      "provided": false
-    }
-  ]
+    "records": [
+        {
+            "type": "A",
+            "name": "proxy1026", 
+            "content": "149.28.85.168", 
+            "ttl": 3600,
+            "proxied": false
+        }
+    ]
 }
