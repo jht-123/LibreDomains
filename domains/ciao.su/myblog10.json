@@ -1,0 +1,25 @@
+{
+  "description": "for freenet",  
+  "owner": {
+    "name": "jiao",               
+    "github": "jht-123",    
+    "email": "1207795003@qq.com"         
+  },
+  "records": [
+    {
+      "type": "A",                  
+      "name": "@",                   
+      "content": "192.168.1.1",      
+      "ttl": 3600,                   
+      "proxied": false              
+    },
+    {
+      "type": "CNAME",
+      "name": "www",
+      "content": "myblog10.ciao.su",   
+      "ttl": 3600,
+      "proxied": false
+    }
+    
+  ]
+}
