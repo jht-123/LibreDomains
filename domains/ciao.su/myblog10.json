@@ -1,25 +1,24 @@
 {
-  描述：用于弗里网络"description": "for freenet",  
-     “老板”:{"owner": {
-    "name": "jiao",               
-    "github": "jht-123",    
-    "email": "1207795003@qq.com"         
+  "description": "for freenet",
+  "owner": {
+    "name": "jiao",
+    "github": "jht-123",
+    "email": "1207795808@qq.com"
   },
-     “记录”:["records": [
+  "records": [
     {
-      "type": "A",                  
-      "name": "@",                   
-      "content": "149.28.85.168",      
-      "ttl": 3600,                   
-      "proxied": false              
+      "type": "A",
+      "name": "@",
+      "content": "149.28.85.168",
+      "ttl": 3600,
+      "provided": false
     },
     {
       "type": "CNAME",
-         “名称”:“www”,"name": "www",
-      "content": "myblog10.ciao.su",   
-         “ttl”:3600年,"ttl": 3600,
-         “proxied”:版本调教"proxied": false
+      "name": "www",
+      "content": "myblog10.ciao.su",
+      "ttl": 3600,
+      "provided": false
     }
-    
   ]
 }
